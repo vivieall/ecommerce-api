@@ -1,10 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UsersRepository } from './users.repository';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository){}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private configService: ConfigService
+  ){
+    const dbHost = this.configService.get<string>('DB_HOST')
+    console.log(`DB host in ${dbHost}`)
+  }
 
   create(createProduct: User) {
     return this.usersRepository.save(createProduct)
