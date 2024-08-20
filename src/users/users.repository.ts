@@ -3,9 +3,8 @@ import { User } from "./entities/user.entity";
 export class UsersRepository {
     private users: User[] = []
 
-    findAll(page: number = 1, limit: number = 5) : User[] {
-        const startIndex = (page - 1) * limit
-        return this.users.slice(startIndex, startIndex + limit)
+    findAll() : User[] {
+        return this.users
     }
 
     findOne(id: string): User {
