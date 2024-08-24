@@ -8,7 +8,7 @@ export class AuthGuard implements CanActivate {
         const authHeader = request.headers.authorization
 
         if (!authHeader){
-            throw new UnauthorizedException('El header de autorizacion no existe')
+             new UnauthorizedException('El header de autorizacion no existe')
         }
 
         const email = authHeader.split(":")[0]

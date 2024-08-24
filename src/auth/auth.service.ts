@@ -7,8 +7,8 @@ export class AuthService {
         
     }
 
-    signIn(email: string, password: string): string {
-        const user = this.usersRepository.findByEmail(email)
+    async signIn(email: string, password: string): Promise<string> {
+        const user = await this.usersRepository.findByEmail(email)
         if (!user || user?.password !== password) {
             return 'Email o password incorrecto'
         }

@@ -1,36 +1,29 @@
 import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { ProductsModule } from './products/products.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { ProductsModule } from './products/products.module';
-import { OrdersModule } from './orders/orders.module';
+import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
-import { OrderDetailsModule } from './order-details/order-details.module';
+import { OrdersModule } from './orders/orders.module';
+import typeOrm from './config/typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true
+      isGlobal: true,
+      load: [typeOrm],
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST'), // Para obtener una variable de entorno en .env
-        post: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_NAME'),
-        entities: [__dirname = '../**/*.entity.ts'],
-        synchronize: true
-      }),
       inject: [ConfigService],
+      useFactory: (config: ConfigService) => config.get('typeorm'),
     }),
-    UsersModule, 
-    ProductsModule, 
-    AuthModule, OrdersModule, CategoriesModule, OrderDetailsModule,
+    ProductsModule,
+    UsersModule,
+    AuthModule,
+    CategoriesModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [],

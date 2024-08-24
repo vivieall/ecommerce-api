@@ -1,40 +1,74 @@
-import { Product } from "./entities/product.entity";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Products } from './entities/products.entity';
+import { Repository } from 'typeorm';
+import { Categories } from 'src/categories/entities/categories.entity';
+import * as data from '../utils/data.json';
 
-
+@Injectable()
 export class ProductsRepository {
-    private products: Product[] = []
+  constructor(
+    @InjectRepository(Products)
+    private productsRepository: Repository<Products>,
+    @InjectRepository(Categories)
+    private categoriesRepository: Repository<Categories>,
+  ) {}
 
-    findAll(page: number = 1, limit: number = 5) : Product[] {
-        const startIndex = (page - 1) * limit
-        return this.products.slice(startIndex, startIndex+limit)
-    }
+  async getProducts(page: number, limit: number): Promise<Products[]> {
+    const products = await this.productsRepository.find({
+      relations: {
+        category: true,
+      },
+    });
 
-    findOne(id: string): Product {
-        const product = this.products.find(product => product.id == parseInt(id))
-        return product
-    }
+    let inStock = products.filter((product) => product.stock > 0);
 
-    update(id: string, updateProduct: Product): number {
-        const index = this.products.findIndex(prod => prod.id == parseInt(id))
+    const start = (page - 1) * limit;
+    const end = start + +limit;
 
-        this.products[index].description = updateProduct.description
-        this.products[index].name = updateProduct.name
-        this.products[index].imgUrl = updateProduct.imgUrl
-        this.products[index].price = updateProduct.price
-        this.products[index].stock = updateProduct.stock
+    inStock = inStock.slice(start, end);
 
-        return this.products[index].id
-    }
+    return inStock;
+  }
 
-    save(newProduct: Product): number {
-        this.products.push(newProduct)
-        return newProduct.id
-    }
+  async getProduct(id: string) {
+    const product = await this.productsRepository.findOneBy({ id });
 
-    delete(id: string): number {
-        const index = this.products.findIndex(prod => prod.id == parseInt(id))
-        this.products.splice(index, 1)
+    return product;
+  }
 
-        return parseInt(id)
-    }
+  async addProducts() {
+    const categories = await this.categoriesRepository.find();
+
+    data?.map(async (element) => {
+      const category = categories.find(
+        (category) => category.name === element.category,
+      );
+
+      const product = new Products();
+      product.name = element.name;
+      product.description = element.description;
+      product.price = element.price;
+      product.stock = element.stock;
+      product.category = category;
+
+      await this.productsRepository
+        .createQueryBuilder()
+        .insert()
+        .into(Products)
+        .values(product)
+        .orUpdate(['description', 'price', 'stock'], ['name'])
+        .execute();
+    });
+
+    return 'Productos agregados';
+  }
+
+  async updateProduct(id: string, product: Products) {
+    await this.productsRepository.update(id, product);
+
+    const updatedProduct = await this.productsRepository.findOneBy({ id });
+
+    return updatedProduct;
+  }
 }

@@ -1,44 +1,56 @@
-import { User } from "./entities/user.entity";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Users } from "./entities/users.entity";
 
+@Injectable()
 export class UsersRepository {
-    private users: User[] = []
+  constructor(
+    @InjectRepository(Users) private usersRepository: Repository<Users>,
+  ) {}
 
-    findAll() : User[] {
-        return this.users
-    }
+  async findAll(page: number = 1, limit: number = 5): Promise<Users[]> {
+    let users = await this.usersRepository.find();
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    users = users.slice(start, end);
 
-    findOne(id: string): User {
-        const user = this.users.find(user => user.id == parseInt(id))
-        return user
-    }
+    return users;
+  }
 
-    findByEmail(email: string): User | undefined {
-        return this.users.find(user => user.email == email)
-    }
+  async findOne(id: string) {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: {
+        orders: true,
+      },
+    });
 
-    update(id: string, updateUser: User): number {
-        const index = this.users.findIndex(user => user.id == parseInt(id))
+    return user;
+  }
 
-        this.users[index].name = updateUser.name
-        this.users[index].email = updateUser.email
-        this.users[index].address = updateUser.address
-        this.users[index].phone = updateUser.phone
-        this.users[index].password = updateUser.password
-        this.users[index].city = updateUser.city
-        this.users[index].country = updateUser.country
+  async save(user: Partial<Users>): Promise<Partial<Users>> {
+    const newUser = await this.usersRepository.save(user);
+    const { password, isAdmin, ...userWithoutPassword } = newUser;
 
-        return this.users[index].id
-    }
+    return userWithoutPassword;
+  }
 
-    save(newUser: User): number {
-        this.users.push(newUser)
-        return newUser.id
-    }
+  async update(id: string, user: Users) {
+    await this.usersRepository.update(id, user);
+    const updatedUser = await this.usersRepository.findOneBy({ id });
 
-    delete(id: string): number {
-        const index = this.users.findIndex(prod => prod.id == parseInt(id))
-        this.users.splice(index, 1)
+    return parseInt(updatedUser.id)
+  }
 
-        return parseInt(id)
-    }
+  async delete(id: string): Promise<number> {
+    const user = await this.usersRepository.findOneBy({ id });
+    this.usersRepository.remove(user);
+
+    return parseInt(id)
+  }
+
+  async findByEmail(email: string): Promise<Users> {
+    return await this.usersRepository.findOneBy({ email });
+  }
 }

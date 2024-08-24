@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './entities/user.entity';
+import { Users } from './entities/users.entity';
 import { UsersRepository } from './users.repository';
 import { ConfigService } from '@nestjs/config';
 
@@ -13,25 +13,25 @@ export class UsersService {
     console.log(`DB host in ${dbHost}`)
   }
 
-  create(createProduct: User) {
+  create(createProduct: Users) {
     return this.usersRepository.save(createProduct)
   }
 
-  findAll(): Omit<User, 'password'>[] {
-    return this.usersRepository.findAll().map(({ password, ...rest}) => rest)
+  async findAll(): Promise<Omit<Users, 'password'>[]> {
+    return (await this.usersRepository.findAll()).map(({ password, ...rest}) => rest)
   }
 
-  findOne(id: string): Omit<User, 'password'> {
-    const user = this.usersRepository.findOne(id)
+  async findOne(id: string): Promise<Omit<Users, 'password'>> {
+    const user = await this.usersRepository.findOne(id)
     const { password, ...rest } = user
     return rest
   }
 
-  update(id: string, updateUser: User): number {
+  async update(id: string, updateUser: Users): Promise<number> {
     return this.usersRepository.update(id, updateUser)
   }
 
-  remove(id: string): number {
+  async remove(id: string): Promise<number> {
     return this.usersRepository.delete(id)
   }
 }
