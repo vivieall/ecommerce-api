@@ -6,12 +6,8 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly usersRepository: UsersRepository,
-    private configService: ConfigService
-  ){
-    const dbHost = this.configService.get<string>('DB_HOST')
-    console.log(`DB host in ${dbHost}`)
-  }
+    private readonly usersRepository: UsersRepository
+  ){}
 
   create(createProduct: Users) {
     return this.usersRepository.save(createProduct)
