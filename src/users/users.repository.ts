@@ -9,7 +9,7 @@ export class UsersRepository {
     @InjectRepository(Users) private usersRepository: Repository<Users>,
   ) {}
 
-  async findAll(page: number = 1, limit: number = 5): Promise<Users[]> {
+  async findAll(page: number = 1, limit: number = 5): Promise<Partial<Users[]>> {
     let users = await this.usersRepository.find();
     const start = (page - 1) * limit;
     const end = start + limit;

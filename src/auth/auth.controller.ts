@@ -1,15 +1,14 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { LoginUserDto } from 'src/users/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post('signin')
-    signIn(@Body('email') email: string, @Body('password') password: string){
-        if (!email || !password) {
-            return 'Email y password son requeridos'
-        }
+    signIn(@Body() credentials: LoginUserDto) {
+        const { email, password } = credentials
         return this.authService.signIn(email, password)
     }
 }

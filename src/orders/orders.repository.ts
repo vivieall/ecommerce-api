@@ -24,7 +24,7 @@ export class OrdersRepository {
     const user = await this.usersRepository.findOneBy({ id: userId });
 
     if (!user) {
-      return 'User not found';
+      return 'Usuario no existe / no encontrado'
     }
 
     const order = new Orders();
@@ -40,7 +40,7 @@ export class OrdersRepository {
         });
 
         if (!product) {
-          return 'Product not found';
+          return 'Producto no encontrado / no valido'
         }
 
         total += Number(product.price);
@@ -82,7 +82,7 @@ export class OrdersRepository {
     });
 
     if (!order) {
-      return 'Order not found';
+      return 'Orden no encontrada / no existe'
     }
 
     return order;

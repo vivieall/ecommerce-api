@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Users } from './entities/users.entity';
 import { UsersRepository } from './users.repository';
 import { ConfigService } from '@nestjs/config';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -9,8 +10,8 @@ export class UsersService {
     private readonly usersRepository: UsersRepository
   ){}
 
-  create(createProduct: Users) {
-    return this.usersRepository.save(createProduct)
+  create(createUser: Partial<Users>) {
+    return this.usersRepository.save(createUser)
   }
 
   async findAll(): Promise<Omit<Users, 'password'>[]> {

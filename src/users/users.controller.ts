@@ -1,15 +1,16 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, HttpCode, HttpStatus, ParseUUIDPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users } from './entities/users.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { validateUser } from 'src/utils/validate';
+import { CreateUserDto } from './dto/create-user.dto';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createUser: Users) {
+  create(@Body() createUser: CreateUserDto) {
     //if (validateUser(createUser)) {
       return this.usersService.create(createUser);
     //} else {
@@ -25,7 +26,7 @@ export class UsersController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.findOne(id);
   }
 

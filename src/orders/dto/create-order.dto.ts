@@ -1,8 +1,13 @@
+import { ArrayMinSize, IsArray, IsNotEmpty, IsUUID } from 'class-validator';
 import { Products } from 'src/products/entities/products.entity';
 
 export class CreateOrderDto {
+
+  @IsNotEmpty()
+  @IsUUID()
   userId: string;
 
-  // [{ id: '123e4567-e89b-12d3-a456-426614174000' }]
+  @IsArray()
+  @ArrayMinSize(1)
   products: Partial<Products[]>;
 }
