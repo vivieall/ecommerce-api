@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { OrdersModule } from './orders/orders.module';
+import { FileUploadModule } from './file-upload/file-upload.module';
 import typeOrm from './config/typeorm';
 
 @Module({
@@ -24,6 +25,7 @@ import typeOrm from './config/typeorm';
     AuthModule,
     CategoriesModule,
     OrdersModule,
+    FileUploadModule,
   ],
   controllers: [AppController],
   providers: [],
