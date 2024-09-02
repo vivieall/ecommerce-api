@@ -8,16 +8,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() createUser: CreateUserDto) {
-    //if (validateUser(createUser)) {
-      return this.usersService.create(createUser);
-    //} else {
-      return 'User no válido.'
-    //}
-  }
-
   @Get()
   @HttpCode(HttpStatus.OK)
   findAll() {
