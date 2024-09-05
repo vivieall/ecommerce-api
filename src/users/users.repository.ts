@@ -26,7 +26,13 @@ export class UsersRepository {
       },
     });
 
-    return user;
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    const { password, isAdmin, ...userWithoutPassword } = user
+
+    return userWithoutPassword;
   }
 
   async save(user: Partial<Users>): Promise<Partial<Users>> {
