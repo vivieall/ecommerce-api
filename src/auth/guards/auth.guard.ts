@@ -24,11 +24,11 @@ export class AuthGuard implements CanActivate {
         user.iat = new Date(user.iat * 1000);
 
         if (user.isAdmin) {
-            user.roles = ['admin'];
+            user.roles = ['admin']
         } else {
-            user.roles = ['user'];
+            user.roles = ['user']
         }
-        
+
         request.user = user;
 
         return true

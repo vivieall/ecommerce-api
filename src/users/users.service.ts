@@ -10,12 +10,17 @@ export class UsersService {
     private readonly usersRepository: UsersRepository
   ){}
 
+  create(createUser: Partial<Users>) {
+    return this.usersRepository.save(createUser)
+  }
+
   async findAll(): Promise<Omit<Users, 'password'>[]> {
     return (await this.usersRepository.findAll()).map(({ password, ...rest}) => rest)
   }
 
   async findOne(id: string) {
-    return await this.usersRepository.findOne(id);
+    const user = await this.usersRepository.findOne(id)
+    return user;
   }
 
   async update(id: string, updateUser: Users): Promise<number> {

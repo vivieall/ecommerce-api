@@ -13,8 +13,8 @@ export class UsersController {
 
   @Get()
   @Roles(Role.Admin)
-  @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard, RolesGuard)
+  @HttpCode(HttpStatus.OK)
   findAll() {
     return this.usersService.findAll();
   }

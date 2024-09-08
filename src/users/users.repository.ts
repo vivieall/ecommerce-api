@@ -26,12 +26,8 @@ export class UsersRepository {
       },
     });
 
-    if (!user) {
-      throw new NotFoundException('Usuario no encontrado');
-    }
-
-    const { password, isAdmin, ...userWithoutPassword } = user
-
+    const { password, isAdmin, ...userWithoutPassword } = user;
+  
     return userWithoutPassword;
   }
 

@@ -1,5 +1,5 @@
 import { PickType } from "@nestjs/mapped-types";
-import { IsEmail, IsEmpty, isEmpty, IsNotEmpty, IsNumber, IsString, IsStrongPassword, Matches, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsEmpty, IsNotEmpty, IsNumber, IsString, IsStrongPassword, Matches, MaxLength, MinLength } from "class-validator";
 
 export class CreateUserDto {
 
