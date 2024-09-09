@@ -1,12 +1,11 @@
 import { Controller, Get, Post, Body, Param, Delete, Put, HttpCode, HttpStatus, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users } from './entities/users.entity';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { validateUser } from 'src/utils/validate';
-import { CreateUserDto } from './dto/create-user.dto';
-import { Roles } from 'src/decorators/roles/roles.decorator';
+import { Roles } from './../decorators/roles/roles.decorator';
 import { Role } from './enum/roles.enum';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { RolesGuard } from './../auth/guards/roles.guard';
+import { AuthGuard } from './../auth/guards/auth.guard';
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

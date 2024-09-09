@@ -3,3 +3,6 @@ node_modules
 .env
 package-lock.json
 package-lock.json
+/coverage
+package-lock.json
+package-lock.json

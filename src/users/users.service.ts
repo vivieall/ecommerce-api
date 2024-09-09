@@ -10,10 +10,6 @@ export class UsersService {
     private readonly usersRepository: UsersRepository
   ){}
 
-  create(createUser: Partial<Users>) {
-    return this.usersRepository.save(createUser)
-  }
-
   async findAll(): Promise<Omit<Users, 'password'>[]> {
     return (await this.usersRepository.findAll()).map(({ password, ...rest}) => rest)
   }

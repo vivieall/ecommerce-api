@@ -1,9 +1,9 @@
 import { Controller, Get, Body, Param, Put, Query, UseGuards, HttpCode, HttpStatus, ParseUUIDPipe } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { Roles } from 'src/decorators/roles/roles.decorator';
-import { Role } from 'src/users/enum/roles.enum';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from './../decorators/roles/roles.decorator';
+import { Role } from './../users/enum/roles.enum';
+import { AuthGuard } from './../auth/guards/auth.guard';
+import { RolesGuard } from './../auth/guards/roles.guard';
 
 @Controller('products')
 export class ProductsController {
