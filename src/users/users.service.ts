@@ -23,7 +23,7 @@ export class UsersService {
     return this.usersRepository.update(id, updateUser)
   }
 
-  async remove(id: string): Promise<number> {
+  async delete(id: string): Promise<number> {
     return this.usersRepository.delete(id)
   }
 }
