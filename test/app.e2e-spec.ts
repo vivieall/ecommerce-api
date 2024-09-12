@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from '../src/users/users.repository';
-import * as bcrypt from 'bcrypt'; // Asegúrate de importar bcrypt
+import * as bcrypt from 'bcrypt';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -37,9 +37,8 @@ describe('UserController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    // Mockear bcrypt.compare para devolver true siempre que se compare la contraseña
     jest.spyOn(bcrypt, 'compare').mockImplementation((password, hash) => {
-      return Promise.resolve(password === 'Testing12*'); // Simula que la contraseña siempre es válida
+      return Promise.resolve(password === 'Testing12*');
     });
 
     await app.init();

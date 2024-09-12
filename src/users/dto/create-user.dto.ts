@@ -1,8 +1,13 @@
 import { PickType } from "@nestjs/mapped-types";
+import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsEmpty, IsNotEmpty, IsNumber, IsString, IsStrongPassword, Matches, MaxLength, MinLength } from "class-validator";
 
 export class CreateUserDto {
 
+    @ApiProperty({
+        required: true,
+        name: 'User name is required'
+    })
     @IsNotEmpty()
     @IsString()
     @MinLength(3)
